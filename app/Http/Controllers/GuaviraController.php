@@ -18,6 +18,8 @@ class GuaviraController extends Controller
         return view('guavira.create');
     }
 
+    //teste comit
+
     /**
      * Store a newly created Guavira in storage.
      *
