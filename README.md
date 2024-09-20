@@ -1,66 +1,65 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## Como seu colega pode pegar o repositório na máquina local e criar um fork:
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Criando um fork do repositório:**
 
-## About Laravel
+1. **Acesse o repositório no GitHub:** Vá para o repositório do GitHub ([https://www.github.com/PantanalTechDev/Guavira.git](https://www.github.com/PantanalTechDev/Guavira.git)).
+2. **Clique em "Fork" no canto superior direito.** Isso criará uma cópia do repositório na sua conta.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**Clonando o repositório forkeado:**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. **Na sua máquina local, navegue até o diretório onde deseja armazenar o repositório clonado.**
+2. **Use o seguinte comando para clonar o seu repositório forkeado:**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```bash
+git clone https://github.com/<seu_nome_de_usuario>/Guavira.git
+```
 
-## Learning Laravel
+**Atenção:** Substitua `<seu_nome_de_usuario>` pelo seu nome de usuário real do GitHub.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+**Criando uma nova branch:**
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+1. **Navegue até o diretório do repositório clonado na sua máquina local.**
+2. **Crie uma nova branch para suas alterações:**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+git checkout -b <nome_da_sua_branch>
+```
 
-## Laravel Sponsors
+**Atenção:** Substitua `<nome_da_sua_branch>` por um nome descritivo para a sua branch (ex.: "recurso-novo-recurso").
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+**Fazendo alterações e realizando commit:**
 
-### Premium Partners
+1. **Faça as alterações desejadas no código.**
+2. **Comite suas alterações:**
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+```bash
+git add .
+git commit -m "Sua mensagem de commit"
+```
 
-## Contributing
+**Atenção:** Substitua "Sua mensagem de commit" por uma mensagem significativa descrevendo suas alterações.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**Enviando suas alterações para o seu fork:**
 
-## Code of Conduct
+1. **Envie suas alterações para a branch do seu repositório forkeado:**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+git push origin <nome_da_sua_branch>
+```
 
-## Security Vulnerabilities
+Agora, seu colega tem uma cópia local do repositório forkeado com sua própria branch para fazer alterações. Ele pode trabalhar na branch dele sem afetar a branch master original.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+**Para mesclar suas alterações de volta ao repositório original posteriormente:**
 
-## License
+**1. Criar uma pull request:**
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+* Acesse seu repositório forkeado no GitHub.
+* Clique no botão "Pull request".
+* Selecione a branch que contém suas alterações e a branch master do repositório original.
+* Escreva uma descrição para sua pull request e envie-a.
+
+**2. Revisão e merge:**
+
+* O mantenedor do repositório original pode revisar sua pull request e mesclá-la na branch master se for aprovada.
+
+Esse processo garante que seu colega possa trabalhar de forma independente em sua própria versão do código, sem afetar a branch master do repositório original. 
