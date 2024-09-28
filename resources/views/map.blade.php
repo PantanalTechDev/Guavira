@@ -246,45 +246,52 @@
     <script>
         // Initialize the map
         var map = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: -20.459110289527487, lng: -54.6540373110798 },
-            zoom: 12
+          center: { lat: -20.459110289527487, lng: -54.6540373110798 },
+          zoom: 12
         });
-
+      
         // Get Guavira data passed from the backend
         var guaviras = @json($guaviras);
-
-        // Loop through each Guavira and place a marker
-        guaviras.forEach(function(guavira) {
+      
+        // Handle the case where there are no Guaviras
+        if (guaviras === null) {
+          console.log("No Guaviras found.");
+          // Optionally, display a message to the user
+          document.getElementById('map').innerHTML = '<p>There are currently no Guaviras registered.</p>';
+        } else {
+          // Process the Guavira data as before
+          guaviras.forEach(function(guavira) {
             var marker = new google.maps.Marker({
-                position: { lat: parseFloat(guavira.latitude), lng: parseFloat(guavira.longitude) },
-                map: map,
-                title: guavira.descricao
+              position: { lat: parseFloat(guavira.latitude), lng: parseFloat(guavira.longitude) },
+              map: map,
+              title: guavira.descricao
             });
-
+      
             // Add an info window for each marker
             var infowindow = new google.maps.InfoWindow({
-                content: `
-                    <div style="color: black; font-size: 14px">
-                        <strong>Owner:</strong> ${guavira.owner}<br>
-                        <strong>Description:</strong> ${guavira.descricao}<br>
-                        <img src="${guavira.imagem}" alt="Tree Image" style="width:100px;">
-                    </div>
-                `
+              content: `
+                <div style="color: black; font-size: 14px">
+                  <strong>Owner:</strong> ${guavira.owner}<br>
+                  <strong>Description:</strong> ${guavira.descricao}<br>
+                  <img src="${guavira.imagem}" alt="Tree Image" style="width:100px;">
+                </div>
+              `
             });
-
+      
             // Add a click listener to show the info window when a marker is clicked
             marker.addListener('click', function() {
-                infowindow.open(map, marker);
+              infowindow.open(map, marker);
             });
-        });
-
+          });
+        }
+      
         function openSidebar() {
-            document.getElementById('sidebar').style.transform = 'translateX(0)';
+          document.getElementById('sidebar').style.transform = 'translateX(0)';
         }
-
+      
         function closeSidebar() {
-            document.getElementById('sidebar').style.transform = 'translateX(-100%)';
+          document.getElementById('sidebar').style.transform = 'translateX(-100%)';
         }
-    </script>
+      </script>
 </body>
 </html>

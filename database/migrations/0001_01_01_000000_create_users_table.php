@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('telefone')->nullable(); // Assuming it's optional
+            $table->string('telefone')->nullable(); // Optional telefone field
             $table->string('cpf')->unique(); // CPF should be unique
+            $table->string('sobre_mim')->nullable(); // Optional field for user's bio or description
+            $table->string('links')->nullable(); // Optional field for user's links or URLs
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

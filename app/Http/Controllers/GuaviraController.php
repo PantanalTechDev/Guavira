@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;  
+ // For conditional validation rules
 
 class GuaviraController extends Controller
 {
@@ -26,16 +28,28 @@ class GuaviraController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate the request data
-        $request->validate([
-            'latitude' => ['required', 'numeric', 'between:-90,90'],
-            'longitude' => ['required', 'numeric', 'between:-180,180'],
+        // Conditional validation based on user input
+        $validationRules = [
             'imagem' => ['nullable', 'image', 'mimes:jpg,png,jpeg,gif', 'max:2048'],
             'descricao' => ['required', 'string'],
-        ]);
+        ];
+
+        if ($request->has('latitude') && $request->has('longitude')) {
+            // Validate coordinates if provided
+            $validationRules = array_merge($validationRules, [
+                'latitude' => ['required', 'numeric', 'between:-90,90'],
+                'longitude' => ['required', 'numeric', 'between:-180,180'],
+            ]);
+        } else {
+            // Validate address if provided as an alternative
+            $validationRules['endereco'] = ['required', 'string'];
+        }
+
+        // Validate the request data
+        $request->validate($validationRules);
 
         // Prepare data
-        $data = $request->only(['latitude', 'longitude', 'descricao']);
+        $data = $request->only(['latitude', 'longitude', 'endereco', 'descricao']);
 
         // Handle file upload
         if ($request->hasFile('imagem')) {
@@ -47,6 +61,19 @@ class GuaviraController extends Controller
             // Create and save the Guavira
             $guavira = new Guavira($data);
             $guavira->user_id = Auth::id(); // Associate with logged-in user
+
+            // If address is provided, use geocoding to get coordinates
+            if (isset($data['endereco']) && !empty($data['endereco'])) {
+                // Replace 'YOUR_API_KEY' with your actual geocoding API key
+                $geocodeUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" . urlencode($data['endereco']) . "&key=AIzaSyA7WqvFFtkFCYHsncBNNOf4R4R6NpQOmco";
+                $geocodeResponse = json_decode(file_get_contents($geocodeUrl), true);
+
+                if (isset($geocodeResponse['results'][0]['geometry']['location'])) {
+                    $guavira->latitude = $geocodeResponse['results'][0]['geometry']['location']['lat'];
+                    $guavira->longitude = $geocodeResponse['results'][0]['geometry']['location']['lng'];
+                }
+            }
+
             $guavira->save();
 
             // Handle success response based on request type
@@ -126,7 +153,12 @@ class GuaviraController extends Controller
         // Fetch all Guavira data
         $guaviras = Guavira::orderBy('created_at', 'desc')->get();
 
-        // Render the map view with Guavira data
+        // If no Guavira objects are found, pass null to the view
+        if ($guaviras->isEmpty()) {
+            $guaviras = null;
+        }
+
+        // Render the map view with Guavira data or null
         return view('map', ['guaviras' => $guaviras]);
     }
 }

@@ -17,12 +17,14 @@
         @csrf
         @method('patch')
 
+        <!-- Name Field -->
         <div>
             <x-input-label for="name" :value="__('Name')" />
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
+        <!-- Email Field -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
@@ -45,6 +47,27 @@
                     @endif
                 </div>
             @endif
+        </div>
+
+        <!-- Telefone Field -->
+        <div>
+            <x-input-label for="telefone" :value="__('Telefone')" />
+            <x-text-input id="telefone" name="telefone" type="text" class="mt-1 block w-full" :value="old('telefone', $user->telefone)" autocomplete="telefone" />
+            <x-input-error class="mt-2" :messages="$errors->get('telefone')" />
+        </div>
+
+        <!-- About Me Field -->
+        <div>
+            <x-input-label for="about_me" :value="__('About Me')" />
+            <textarea id="about_me" name="about_me" class="mt-1 block w-full" rows="3">{{ old('about_me', $user->about_me) }}</textarea>
+            <x-input-error class="mt-2" :messages="$errors->get('about_me')" />
+        </div>
+
+        <!-- Links Field -->
+        <div>
+            <x-input-label for="links" :value="__('Links')" />
+            <x-text-input id="links" name="links" type="text" class="mt-1 block w-full" :value="old('links', $user->links)" autocomplete="links" />
+            <x-input-error class="mt-2" :messages="$errors->get('links')" />
         </div>
 
         <div class="flex items-center gap-4">

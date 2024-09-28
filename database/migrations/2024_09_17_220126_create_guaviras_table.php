@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('guaviras', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Reference to users table
-            $table->decimal('latitude', 12, 8); // Latitude with precision
-            $table->decimal('longitude', 12, 8); // Longitude with precision
-            $table->string('imagem')->nullable(); // Path to the image, optional
-            $table->text('descricao')->nullable(); // Description of the tree location, optional
+            $table->foreignId('user_id')->constrained();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
+            $table->string('endereco')->nullable(); // Add the new field
+            $table->string('imagem')->nullable();
+            $table->text('descricao')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('guaviras');
+        Schema::dropIfExists('guavira');
     }
 };

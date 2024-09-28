@@ -16,7 +16,7 @@ class Guavira extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id', // Correct attribute name
+        'user_id', 
         'latitude',
         'longitude',
         'imagem',
