@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Guavira;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;  
- // For conditional validation rules
+use Illuminate\Support\Facades\Auth;
 
 class GuaviraController extends Controller
 {
@@ -17,101 +17,124 @@ class GuaviraController extends Controller
      */
     public function create()
     {
-        return view('guavira.create');
-    }
+        $guaviras = Guavira::with('user')
+                    ->orderBy('created_at', 'desc')
+                    ->get();
 
-    //testando commit 
+        return view('guavira.create', ['guaviras' => $guaviras, 'mapKey' => config('services.google.maps_api_key')]);
+    }
 
     /**
      * Store a newly created Guavira in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        // Conditional validation based on user input
-        $validationRules = [
-            'imagem' => ['nullable', 'image', 'mimes:jpg,png,jpeg,gif', 'max:2048'],
-            'descricao' => ['required', 'string'],
-        ];
-
-        if ($request->has('latitude') && $request->has('longitude')) {
-            // Validate coordinates if provided
-            $validationRules = array_merge($validationRules, [
-                'latitude' => ['required', 'numeric', 'between:-90,90'],
-                'longitude' => ['required', 'numeric', 'between:-180,180'],
-            ]);
-        } else {
-            // Validate address if provided as an alternative
-            $validationRules['endereco'] = ['required', 'string'];
-        }
-
-        // Validate the request data
-        $request->validate($validationRules);
-
-        // Prepare data
-        $data = $request->only(['latitude', 'longitude', 'endereco', 'descricao']);
-
-        // Handle file upload
-        if ($request->hasFile('imagem')) {
-            $path = $request->file('imagem')->store('images', 'public');
-            $data['imagem'] = $path;
-        }
+        Log::info("Store method invoked");
 
         try {
-            // Create and save the Guavira
-            $guavira = new Guavira($data);
-            $guavira->user_id = Auth::id(); // Associate with logged-in user
+            Log::info("Input Data: ", $request->all());
 
-            // If address is provided, use geocoding to get coordinates
-            if (isset($data['endereco']) && !empty($data['endereco'])) {
-                // Replace 'YOUR_API_KEY' with your actual geocoding API key
-                $geocodeUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" . urlencode($data['endereco']) . "&key=AIzaSyA7WqvFFtkFCYHsncBNNOf4R4R6NpQOmco";
-                $geocodeResponse = json_decode(file_get_contents($geocodeUrl), true);
+            // Validation rules
+            $validationRules = [
+                'descricao' => ['required', 'string', 'max:150'],
+                'imagem' => ['nullable', 'image', 'mimes:jpg,png,jpeg,gif', 'max:2048'],
+                'registration_type' => ['required', 'in:simples,comerciante'], // Validate registration type
+                'latitude' => ['nullable', 'numeric', 'between:-90,90'],
+                'longitude' => ['nullable', 'numeric', 'between:-180,180'],
+            ];
 
-                if (isset($geocodeResponse['results'][0]['geometry']['location'])) {
-                    $guavira->latitude = $geocodeResponse['results'][0]['geometry']['location']['lat'];
-                    $guavira->longitude = $geocodeResponse['results'][0]['geometry']['location']['lng'];
+            // CNPJ validation only for 'comerciante' type
+            if ($request->input('registration_type') === 'comerciante') {
+                $validationRules['cnpj'] = [
+                    'required',
+                    'digits:14',
+                    'regex:/^\d{14}$/',
+                ];
+            }
+
+            if ($request->input('location_type') == 'endereco') {
+                $validationRules['cidade'] = ['required', 'string', 'max:100'];
+                $validationRules['rua'] = ['required', 'string', 'max:150'];
+                $validationRules['numero'] = ['required', 'string', 'max:10'];
+            }
+
+            // Validate request
+            $validatedData = $request->validate($validationRules);
+            Log::info('Validation passed:', ['data' => $validatedData]);
+
+            // Initialize data for the Guavira model
+            $data = [
+                'descricao' => $validatedData['descricao'],
+                'imagem' => null,
+                'latitude' => null,
+                'longitude' => null,
+                'cnpj' => $request->input('registration_type') === 'comerciante'
+                    ? preg_replace('/\D/', '', $validatedData['cnpj'])
+                    : null
+            ];
+
+            Log::info('Data before processing image and geocoding:', ['data' => $data]);
+
+            // Handle image upload if present
+            if ($request->hasFile('imagem')) {
+                $path = $request->file('imagem')->store('images', 'public');
+                $data['imagem'] = $path;
+                Log::info('Image uploaded:', ['path' => $path]);
+            }
+
+            // Process geocoding or use manual coordinates
+            if ($request->input('location_type') === 'manual') {
+                $data['latitude'] = $validatedData['latitude'];
+                $data['longitude'] = $validatedData['longitude'];
+                Log::info('Manual coordinates set:', ['latitude' => $data['latitude'], 'longitude' => $data['longitude']]);
+            }
+            elseif ($request->input('location_type') === 'endereco'){
+                $fullAddress = "{$validatedData['cidade']}, {$validatedData['rua']}, {$validatedData['numero']}";
+                Log::info('Attempting geocode with address:', ['address' => $fullAddress]);
+                $geoResult = $this->geocode($fullAddress);
+
+                if ($geoResult['success']) {
+                    $data['latitude'] = $geoResult['latitude'];
+                    $data['longitude'] = $geoResult['longitude'];
+                    Log::info('Geocoding successful:', ['latitude' => $data['latitude'], 'longitude' => $data['longitude']]);
+                } else {
+                    Log::error('Geocoding failed for address:', ['address' => $fullAddress]);
+                    return back()->withErrors(['address' => 'Could not geocode address. Please check the details.']);
                 }
             }
 
+            // Save the Guavira model with the collected data
+            $guavira = new Guavira($data);
+            $guavira->user_id = Auth::id();
             $guavira->save();
 
-            // Handle success response based on request type
-            if ($request->expectsJson()) {
-                return response()->json(['success' => 'Guavira registered successfully!'], 201);
-            }
+            Log::info('Data successfully saved to database:', ['data' => $data]);
 
-            return redirect()->route('guavira.map')->with('success', 'Guavira registered successfully!');
-
+            return redirect()->route('guavira.create')->with('success', 'Guavira registered successfully!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation exception:', ['errors' => $e->errors()]);
+            return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
-            \Log::error('Error saving Guavira:', ['exception' => $e->getMessage()]);
-
-            // Handle error response based on request type
-            if ($request->expectsJson()) {
-                return response()->json(['error' => 'An error occurred while saving the Guavira.'], 500);
-            }
-
-            return redirect()->back()->with('error', 'An error occurred while saving the Guavira.');
+            Log::error('General exception occurred:', ['message' => $e->getMessage()]);
+            return back()->withErrors(['error' => 'An error occurred while processing your request. Please try again later.'])->withInput();
         }
     }
 
-    /**
-     * Fetch Guavira trees or show the map view.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-     */
+    public function home()
+    {
+        return view('home'); 
+    }
+
     public function map(Request $request)
     {
-        // Get latitude, longitude, and radius from the request
         $latitude = $request->input('latitude');
         $longitude = $request->input('longitude');
-        $radius = $request->input('radius', 10); // Default radius of 10 km
+        $radius = $request->input('radius', 10);
 
         try {
-            // If latitude and longitude are provided, calculate distances and filter Guaviras
             if (!is_null($latitude) && !is_null($longitude)) {
                 $latitude = (float) $latitude;
                 $longitude = (float) $longitude;
@@ -125,18 +148,21 @@ class GuaviraController extends Controller
                     ->orderBy('distance')
                     ->get();
 
-                // If the request expects JSON, return the data as JSON
                 if ($request->expectsJson()) {
                     return response()->json($guaviras);
                 }
+            } else {
+                // If no location data is provided, fetch all Guavira records
+                $guaviras = Guavira::with('user')
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+
+                return view('map', ['guaviras' => $guaviras, 'mapKey' => config('services.google.maps_api_key')]);
             }
 
-            // Otherwise, show the map view
-            return $this->showMapView();
+            return view('map', ['guaviras' => $guaviras, 'mapKey' => config('services.google.maps_api_key')]);
 
         } catch (\Exception $e) {
-            \Log::error('Error fetching Guavira data:', ['exception' => $e->getMessage()]);
-
             if ($request->expectsJson()) {
                 return response()->json(['error' => 'An error occurred while fetching data.'], 500);
             }
@@ -146,21 +172,36 @@ class GuaviraController extends Controller
     }
 
     /**
-     * Show the map view with all Guavira data.
+     * Geocode the given address to fetch latitude and longitude.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @param string $address
+     * @return array
      */
-    protected function showMapView()
+    private function geocode($address)
     {
-        // Fetch all Guavira data
-        $guaviras = Guavira::orderBy('created_at', 'desc')->get();
+        // Request to the Google Maps Geocoding API
+        $apiKey = config('services.google.maps_api_key');
 
-        // If no Guavira objects are found, pass null to the view
-        if ($guaviras->isEmpty()) {
-            $guaviras = null;
+        Log::info("got here");
+
+        $response = Http::get("https://maps.googleapis.com/maps/api/geocode/json", [
+            'address' => $address,
+            'key' => $apiKey,
+        ]);
+        
+        Log::info('Google Maps API response:', ['response' => $response->json()]);
+
+        // Check if the request was successful and results are available
+        if ($response->successful() && isset($response->json()['results'][0])) {
+            $location = $response->json()['results'][0]['geometry']['location'];
+            return [
+                'success' => true,
+                'latitude' => $location['lat'],
+                'longitude' => $location['lng'],
+            ];
         }
 
-        // Render the map view with Guavira data or null
-        return view('map', ['guaviras' => $guaviras]);
+        // Return failure if geocoding did not succeed
+        return ['success' => false];
     }
 }

@@ -1,0 +1,566 @@
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@500&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+     scroll-behavior: smooth; 
+     height: 100%;
+     margin: 0;
+     padding: 0;
+     display: flex;
+     flex-direction: column;
+}
+
+.navbar {
+    background-color: rgba(138, 173, 75, 0.9); 
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: none; 
+    width: 100%;
+    max-height: 16vh;
+    padding: 1rem;
+}
+
+.main{
+   flex: 1;
+    width: 100%;
+    height: calc(100vh - 16vh);
+    padding: 0;
+   
+}
+
+.logo {
+    height: 50px;
+    width: 50px;
+}
+
+nav a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 700;
+}
+
+.navbar a:hover {
+    color: #38a169;
+}
+
+.globe-icon {
+    height: 24px;
+    width: 24px;
+}
+
+.hero {
+            
+        background-size: cover;
+        background-position: center;
+        background-image: 
+          linear-gradient(rgba(0, 0, 0, 0.7), rgba(138, 173, 75, 0.9)), 
+          url('bg-callout1.jpg'); 
+         
+          color: white;
+          height: auto;
+         min-height: 100vh;
+         width: 100%;
+         display: flex;
+         justify-content: center;
+         justify-items: stretch;
+           align-items: center; 
+        padding: 1rem;
+                
+}
+      
+.box0 {
+ 
+  padding: 2.6rem 0rem;
+    width: 100%; 
+    height: 100%; 
+    max-width: 83vw;
+    min-height: 100vh;
+    display: flex;
+    justify-content: space-around; 
+    align-items: center; 
+    
+   
+}
+
+.box1{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    
+    width: 100%;
+   flex-direction: column;
+}
+
+.box2
+{
+    width: 100%;
+    max-height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box1, .box2 {
+    min-height: 0;
+    min-width: 0; /* Garante que os filhos não excedam o espaço disponível */
+    max-width: 100%; /* Limita a largura máxima */
+    max-height: 100%; /* Permite que a altura seja flexível */
+   
+}
+
+.mapa{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-height: 100%;
+}
+
+.mapa img {
+    max-height: 100%;
+    max-width: 100%; 
+   
+    padding: 1rem; 
+    border-radius: 1.3rem;
+   
+    
+}
+
+.guavirinha img, .mapa img {
+    max-width: 100%;         
+    height: auto;
+    object-fit: fill;
+}
+
+.guavirinha{
+    
+   max-height: 100%;
+   width: 100%;
+  
+}
+
+.hero-content h1 {
+    font-family: "League Spartan", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;;
+   text-align: center;
+   font-size: clamp(3rem, 1vw + 1rem, 3rem);
+ 
+}
+
+.hero-content  p  {
+   
+    font-size: clamp(2.5rem, 1vw + 1rem, 3rem);
+    font-family: "League Spartan", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;;
+   
+}
+
+.hero-content{
+
+    animation: myAnim 2s ease 0s 1 normal forwards;
+ display: flex;
+ flex-direction: column;
+justify-content: center;
+ align-items: center;
+ text-align: center;
+
+}
+
+button {
+    background-color: #38a169;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #2f855a;
+}
+
+.nav-left, .nav-right {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.nav-left {
+    left: 20px;
+}
+
+.nav-right {
+    right: 20px;
+}
+
+.project {
+    background: rgb(101,125,49);
+    background: linear-gradient(0deg, #657d31 0%, #2c4b2f 0%, #8aad4b 100%);
+  /*linear-gradient(to right, #2c4b2f 0%, #657d31 58%, #657d31 100%); */
+   /* background:  linear-gradient(0deg,  #9C981A 0%,  #E4EA66 100%); */
+    display: flex; /* Habilita o Flexbox */
+    justify-content: space-between; /* Espaço entre os itens */
+    align-items: center; /* Centraliza verticalmente */
+    padding: 2rem;
+    color:  rgba(233, 233, 8, 0.932);
+   
+ 
+}
+
+.project-content {
+    width: 75%;  
+    padding: 1.5rem;
+    text-align: justify;
+    text-justify: inter-word;
+    color:  rgba(233, 233, 8, 0.932);;
+    
+    
+}
+
+.project-image {
+    max-width: 100%; 
+    height: auto; 
+    margin-top: 30px;
+    border-radius: 10px;
+}
+
+.titulo-section {
+    font-size: 1.875rem; 
+    font-weight: 700; 
+    color: rgba(233, 233, 8, 0.932);
+    text-justify: none;
+}
+
+.titulo-section1 {
+    font-size: 1.875rem;
+    font-weight: 700; 
+    color:  rgba(233, 233, 8, 0.932);
+    text-justify: none;
+}
+
+.texto-section1 {
+    margin-top: 1rem; 
+    
+    color:  rgba(233, 233, 8, 0.932);
+}
+
+.texto-section {
+    margin-top: 1rem; 
+}
+
+.bt-section {
+    margin-top: 1.5rem; 
+    background-color: #38a169; 
+    color: white; 
+    padding-top: 0.5rem; 
+    padding-bottom: 0.5rem; 
+    padding-left: 1rem; 
+    padding-right: 1rem; 
+    border-radius: 0.25rem; 
+    border: none; 
+    cursor: pointer; 
+}
+
+.about {
+    background: rgb(44,75,47);
+background: linear-gradient(0deg, rgba(44,75,47,1) 0%, rgba(101,125,49,1) 21%, rgba(87,120,60,1) 71%, rgba(85,118,59,1) 89%, rgba(44,75,47,1) 100%);
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 2rem;
+   
+}
+
+.box-figura {
+    width: 100%;  
+    
+}
+
+.about .about-image{
+
+    width: 100%; 
+    height: auto; 
+    margin-top: 30px;
+    border-radius: 10px;
+}
+
+.about-content {
+  
+    width: 100%; 
+    padding: 1.5rem;
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.texto-section2 {
+    
+    margin-top: 1rem; 
+    color: #2f855a; 
+}
+
+.team {
+    background: linear-gradient(0deg, #8AAD4B 3%, rgba(44,75,47,1)  100%);
+    color: green;
+    text-align: center;
+    padding: 60px 0;
+}
+
+.team-members {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    animation: inTop 1.4s ease 0s 1 normal forwards;
+}
+
+.team-member {
+    background-color: green;
+    color: #333;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px;
+    text-align: center;
+    width: 200px;
+}
+
+.team-member img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+footer {
+    position: relative;
+    left: 0;
+    bottom: 0;
+    background-color:#8aad4b;
+    color: black;
+    text-align: center;
+    padding: 20px 0;
+    height: 15vh;
+}
+
+@media (max-width: 680px) {
+    .project, .about {
+        flex-direction: column;
+        align-items: center; 
+        text-align: center; 
+        gap: 30px; 
+    }
+
+    .project-content, .about-content {
+        margin-right: 0;
+        padding-left: 0; 
+    }
+
+    .project img, .about img {
+        max-width: 100%;
+    }
+
+    .project-image {
+        margin-top: 20px; 
+    }
+}
+
+@media (max-width: 980px) {
+    .about, .project {
+        flex-direction: column;
+        gap: 1.5rem; 
+    }
+
+    .project-content {
+        width: 100%;
+        text-align: justify;
+        text-justify: inter-word;
+    }
+    
+    .content {
+        max-width: 100%;
+    }
+
+    .project img, .about img {
+        max-width: 100%; 
+    }
+
+    .project-image {
+        margin-top: 20px; 
+    }
+    .navbar{
+        max-height: 100% ;
+    }
+}
+@media (max-width: 992px) {
+    .navbar-toggler{
+        text-align: left;
+    }
+    .navbar-collapse {
+        text-align: left; 
+    }
+   
+}
+
+@media (max-width: 830px) {
+ .box0{
+    flex-direction: column;
+ }
+ .box1
+ {  justify-content: center;
+    
+ }
+ .hero-content p{
+    text-align: center;
+    font-size: 1rem;
+ }
+ 
+}
+.leFadeIn span { 
+    animation-name: leFadeIn 
+}
+@keyframes leFadeIn {
+    from { opacity: 0 }
+    to { opacity: 1 }
+}
+
+
+@keyframes inleft {
+    0% {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.animated-inleft {
+
+    animation: inleft 1.4s ease 0s 1 normal forwards;
+    
+}
+
+@keyframes inRight {
+	0% {
+		opacity: 0;
+		transform: translateX(50px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes inTop {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animated-intop {
+    animation: inTop 1.4s ease 0s 1 normal forwards;
+}
+@keyframes myAnim {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.animate-scale {
+    animation: myAnim 2s ease 4s 2 normal forwards;
+}
+
+/* Font imports */
+	/* Font imports */
+/* Font imports */
+@import url('https://fonts.googleapis.com/css?family=Oswald|Roboto|Slabo+27px');
+
+/* Main Info Window Card */
+.map-card {
+    max-width: 200px; /* Reduced width */
+    background-color: #fff;
+    border: 1px solid #CB6074;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    font-family: 'Roboto', sans-serif;
+    color: #3C3C3C;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+}
+
+/* Image Container */
+.map-card .card-img {
+    width: 100%;
+    background-color: #CB6074;
+}
+
+.map-card .card-img img {
+    width: 100%;
+    height: auto;
+    max-height: 120px; /* Reduced height for the image */
+    object-fit: cover; /* Ensures the image covers the area without distortion */
+    border-bottom: 4px solid #CB6074;
+    transition: opacity 0.3s;
+}
+
+.map-card:hover .card-img img {
+    opacity: 0.85;
+}
+
+/* Card Details */
+.map-card .card-details {
+    padding: 10px; /* Reduced padding for a more compact card */
+    font-size: 13px; /* Slightly smaller font size */
+}
+
+/* Fields with Margin */
+.map-card .card-details strong {
+    font-weight: bold;
+    color: #CB6074;
+    font-family: 'Oswald', sans-serif;
+    display: block; /* Ensures that each field appears on a new line */
+    margin-bottom: 4px; /* Reduced margin for the bottom of each field */
+}
+
+.map-card .card-description {
+    margin-top: 8px;
+    line-height: 1.4;
+    color: #3C3C3C;
+}
+
+/* Additional Spacing for Description */
+.map-card .card-description {
+    margin-top: 8px; /* Adjusted for consistency */
+}
+
+/* Hover Effect */
+.map-card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}

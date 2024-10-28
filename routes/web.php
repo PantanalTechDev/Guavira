@@ -4,13 +4,14 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GuaviraController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/guaviras', [GuaviraController::class, 'map'])->name('guavira.map');
+//Route::get('/guaviras', [GuaviraController::class, 'map'])->name('guavira.map');
+Route::redirect('/', '/home');
+Route::get('/home', [GuaviraController::class, 'home'])->name('guavira.home');
+Route::get('/mapa', [GuaviraController::class, 'map'])->name('guavira.map');
 
-Route::get('/nova/guavira', [GuaviraController::class, 'create'])->name('guavira.create');
-Route::post('/nova/guavira', [GuaviraController::class, 'store'])->name('guavira.store');
-
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware('auth')->group(function () {
+    Route::get('/nova/guavira', [GuaviraController::class, 'create'])->name('guavira.create');
+    Route::post('/nova/guavira', [GuaviraController::class, 'store'])->name('guavira.store');
 });
 
 Route::get('/dashboard', function () {

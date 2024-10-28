@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('guaviras', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->string('latitude')->nullable();
-            $table->string('longitude')->nullable();
+            $table->string('latitude');
+            $table->string('longitude');
             $table->string('endereco')->nullable(); // Add the new field
             $table->string('imagem')->nullable();
             $table->text('descricao')->nullable();
+            $table->string('cnpj')->nullable(); // Add the new field
             $table->timestamps();
         });
     }
