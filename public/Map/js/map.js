@@ -8,8 +8,17 @@ function initMap(guaviras) {
     // Handle the case where there are no Guaviras
     if (!guaviras || guaviras.length === 0) {
         console.log("No Guaviras found.");
-        // Optionally, display a message to the user
-        document.getElementById('map').innerHTML = '<p>There are currently no Guaviras registered.</p>';
+        
+        // Option 1: Using the hidden input
+        const imagePath = document.getElementById('guaviraImagePath').value;
+    
+        // Option 2: Using the data attribute
+        // const imagePath = document.getElementById('map').dataset.guaviraImage;
+    
+        document.getElementById('map').innerHTML = `
+            <img src="${imagePath}" alt="Guavira pointing down" style="display: block; margin: 0 auto 0; max-width: 80%; height: 80%;">
+            <h3 style="text-align: center";>Nenhuma Guavira encontrada. Seja o primeiro!</h3>
+        `;        
     } else {
         // Process the Guavira data
         guaviras.forEach(function (guavira) {

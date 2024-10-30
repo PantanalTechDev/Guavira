@@ -67,7 +67,8 @@
         </div>
     </nav>
 
-    <!-- Map Section -->
+    <input class="logo-pantanal animated-inleft" type="hidden" id="guaviraImagePath" value="{{ asset('Map/images/guavirinhaApontandoBaixo.png') }}">
+   
     <div id="map" style="height: 500px; width: 100%;"></div> <!-- Adjust height and width as needed -->
 
     <!-- JavaScript Files -->

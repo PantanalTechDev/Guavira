@@ -61,7 +61,13 @@
                 @endauth
                 @guest
                 <div class="d-flex align-items-center ms-3">
-                    <a href="{{ route('register') }}" class="btn btn-primary">Crie sua conta!</a>
+                    <button type="button" class="btn dropdown-toggle" id="user-menu-button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img class="w-8 h-8 rounded-circle" src="{{ asset('Map/images/default-profile.png') }}" alt="user photo" style="width: 2rem; height: 2rem;">
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="user-menu-button">
+                        <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Entrar</a></li>
+                        <li><a class="dropdown-item" href="{{ route('register') }}">Nova Conta</a></li> 
+                    </ul>
                 </div>
                 @endguest
             </div>
@@ -118,17 +124,16 @@
 
         <!-- Team Section -->
         <section class="team" id="guaviras">
-            <h2 class="tiuloTeam animated-intop">Quem Somos</h2>
-            <div class="team-members">
-                <!-- Team Member 1 -->
-                <div class="team-member animated-intop">
-                    <img src="{{ asset('Map/images/default-profile.png') }}" alt="Team Member 1" loading="lazy">
-                    <h3>Nome 1</h3>
-                    <p>Descrição breve do membro da equipe.</p>
-                </div>
-                <!-- Repeat for other members -->
-            </div>
-            <!--<button class="button animated-intop">Saiba Mais</button>!-->
+            <h2 class="tiuloTeam animated-intop">Quem Somos ? </h2>   
+                    <div class="container-fluid container-team">
+                        <figure class="logo-pantanal animated-inleft"><img src="{{ asset('Map/images/Logo-removebg-preview.png') }}" alt="guavira" loading="lazy"></figure>  
+                            <div class="descricao"> 
+                                <h3 class="texto-descricao  animated-inleft">A Pantanal Tech é uma empresa criada por alunos do curso de Tecnologia em Sistemas para Internet do IFMS, 
+                                    focada em desenvolver soluções tecnológicas para projetos de pesquisa acadêmica e atender às demandas do setor empresarial.
+                                </h3>
+                            </div>
+                   </div>
+            <button class="button animated-intop">Saiba Mais</button>
         </section>
     </main>
 

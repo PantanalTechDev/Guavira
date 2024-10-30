@@ -5,37 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enhanced Google-Style Form</title>
     <link rel="stylesheet" href="{{ asset('Map/css/home.css') }}">
+    <link rel="stylesheet" href="{{ asset('Map/css/cadastro.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <style>
-        body {
-            background-color: #f7f7f7;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
-        .main-container {
-            display: flex;
-            width: 100%;
-            height: 100vh;
-            padding: 0;
-        }
-        .form-container {
-            flex: 1;
-            background-color: #fff;
-            padding: 2rem;
-            border-right: 2px solid #e0e0e0;
-            box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
-            overflow-y: auto;
-        }
-        #map {
-            flex: 1;
-            height: 100vh;
-            border-left: 2px solid #e0e0e0;
-        }
-    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg sticky-top">
@@ -87,15 +59,16 @@
 
 <div class="main-container">
     <div class="form-container">
-        <h2 class="form-header">Enhanced Google-Style Form</h2>
-        <p class="form-description">Please complete the form below with the required information.</p>
+        <h2>Bem-vindo!</h2>
+        <h3 class="form-header">Cadastre aqui uma Guavira ou o seu comércio!</h3>
+        <p class="form-description">Preencha o formulário abaixo:</p>
 
         <form action="{{ route('guavira.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <!-- Registration Type Selection -->
             <div class="mb-4">
-                <label for="registration_type" class="form-label form-section-title">Registration Type</label>
+                <label for="registration_type" class="form-label form-section-title">Tipo de cadastro</label>
                 <select id="registration_type" name="registration_type" class="form-control" required>
                     <option value="simples" {{ old('registration_type') == 'simples' ? 'selected' : '' }}>Cadastro simples</option>
                     <option value="comerciante" {{ old('registration_type') == 'comerciante' ? 'selected' : '' }}>Comerciante/Venda/Distribuidor</option>
@@ -107,7 +80,7 @@
 
             <!-- CNPJ Field (only for Comerciante/Venda/Distribuidor) -->
             <div id="cnpj-field" class="mb-4 {{ old('registration_type') == 'comerciante' ? '' : 'd-none' }}">
-                <label for="cnpj" class="form-label form-section-title">CNPJ</label>
+                <label for="cnpj" class="form-label form-section-title">CNPJ (opcional)</label>
                 <input type="text" id="cnpj" name="cnpj" class="form-control" value="{{ old('cnpj') }}" placeholder="CNPJ">
                 @error('cnpj')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -116,7 +89,7 @@
 
             <!-- Description Field -->
             <div class="mb-4">
-                <label for="descricao" class="form-label form-section-title">Description</label>
+                <label for="descricao" class="form-label form-section-title">Descrição</label>
                 <textarea id="descricao" name="descricao" class="form-control" required maxlength="150">{{ old('descricao') }}</textarea>
                 @error('descricao')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -125,7 +98,7 @@
 
             <!-- Image Upload Field -->
             <div class="mb-4">
-                <label for="imagem" class="form-label form-section-title">Image (optional)</label>
+                <label for="imagem" class="form-label form-section-title">Imagem (opcional)</label>
                 <input type="file" id="imagem" name="imagem" class="form-control-file">
                 @error('imagem')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -134,10 +107,10 @@
 
             <!-- Location Type Selection -->
             <div class="mb-4">
-                <label for="location_type" class="form-label form-section-title">Location Type</label>
+                <label for="location_type" class="form-label form-section-title">Cadastrar local</label>
                 <select id="location_type" name="location_type" class="form-control" required>
-                    <option value="manual" {{ old('location_type') == 'manual' ? 'selected' : '' }}>Manual Coordinates</option>
-                    <option value="endereco" {{ old('location_type') == 'endereco' ? 'selected' : '' }}>Address</option>
+                    <option value="manual" {{ old('location_type') == 'manual' ? 'selected' : '' }}>Coordenadas</option>
+                    <option value="endereco" {{ old('location_type') == 'endereco' ? 'selected' : '' }}>Endereço</option>
                 </select>
                 @error('location_type')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -179,9 +152,12 @@
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
-            <button type="submit" class="btn submit-button w-100">Submit</button>
+            <button type="submit" class="btn submit-button w-100">Ir</button>
         </form>
     </div>
+
+    <input class="logo-pantanal animated-inleft" type="hidden" id="guaviraImagePath" value="{{ asset('Map/images/guavirinhaApontandoBaixo.png') }}">
+
     <div id="map"></div>
 </div>
 
